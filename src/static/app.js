@@ -30,27 +30,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const darkModeIcon = document.getElementById("dark-mode-icon");
   const darkModeLabel = document.getElementById("dark-mode-label");
 
-  function applyDarkMode(enabled) {
-    if (enabled) {
-      document.body.classList.add("dark-mode");
-      darkModeIcon.textContent = "☀️";
-      darkModeLabel.textContent = "Light Mode";
-    } else {
-      document.body.classList.remove("dark-mode");
-      darkModeIcon.textContent = "🌙";
-      darkModeLabel.textContent = "Dark Mode";
+  if (darkModeToggle) {
+    function applyDarkMode(enabled) {
+      if (enabled) {
+        document.body.classList.add("dark-mode");
+        darkModeIcon.textContent = "☀️";
+        darkModeLabel.textContent = "Light Mode";
+        darkModeToggle.setAttribute("aria-label", "Switch to light mode");
+      } else {
+        document.body.classList.remove("dark-mode");
+        darkModeIcon.textContent = "🌙";
+        darkModeLabel.textContent = "Dark Mode";
+        darkModeToggle.setAttribute("aria-label", "Switch to dark mode");
+      }
     }
+
+    // Load saved preference
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
+    applyDarkMode(savedDarkMode);
+
+    darkModeToggle.addEventListener("click", () => {
+      const isDark = document.body.classList.contains("dark-mode");
+      applyDarkMode(!isDark);
+      localStorage.setItem("darkMode", !isDark);
+    });
   }
-
-  // Load saved preference
-  const savedDarkMode = localStorage.getItem("darkMode") === "true";
-  applyDarkMode(savedDarkMode);
-
-  darkModeToggle.addEventListener("click", () => {
-    const isDark = document.body.classList.contains("dark-mode");
-    applyDarkMode(!isDark);
-    localStorage.setItem("darkMode", !isDark);
-  });
 
   // Activity categories with corresponding colors
   const activityTypes = {
